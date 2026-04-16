@@ -159,8 +159,9 @@ export default function AppointmentsPage() {
   };
 
   return (
-    <div className="animate-fade-in max-w-7xl mx-auto">
-      {/* Header */}
+    <>
+      <div className="animate-fade-in max-w-7xl mx-auto">
+        {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         <div>
           <h1 className="text-2xl font-bold text-surface-900 flex items-center gap-2">
@@ -283,108 +284,157 @@ export default function AppointmentsPage() {
         </div>
       )}
 
+      </div>
+
       {/* Modal */}
       {showModal && (
         <div className="modal-overlay" onClick={() => { setShowModal(false); setEditAppt(null); }}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-bold text-surface-900">
-                  {editAppt ? "Edit Appointment" : "New Appointment"}
+          <div className="modal-content flex flex-col p-0 overflow-hidden" onClick={(e) => e.stopPropagation()}>
+            {/* Header */}
+            <div className="flex items-center justify-between px-6 py-5 border-b border-surface-200 bg-surface-50/50">
+              <div>
+                <h2 className="text-xl font-bold text-surface-900 tracking-tight">
+                  {editAppt ? "Edit Appointment" : "Schedule Appointment"}
                 </h2>
-                <button onClick={() => { setShowModal(false); setEditAppt(null); }} className="text-surface-400 hover:text-surface-600">
-                  <X size={20} />
-                </button>
+                <p className="text-sm text-surface-500 mt-1">
+                  {editAppt ? "Modify the appointment requirements below." : "Book an appointment between a patient and practitioner."}
+                </p>
               </div>
+              <button 
+                onClick={() => { setShowModal(false); setEditAppt(null); }} 
+                className="p-2 -mr-2 rounded-xl text-surface-400 hover:text-surface-700 hover:bg-surface-100 transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
 
+            <div className="px-6 py-6 overflow-y-auto max-h-[65vh]">
               {formError && (
-                <div className="mb-4 p-3 rounded-xl bg-danger-50 border border-danger-500/20 text-danger-700 text-sm">
+                <div className="mb-6 p-4 rounded-xl bg-danger-50 border border-danger-500/20 text-danger-700 text-sm font-medium flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-danger-500" />
                   {formError}
                 </div>
               )}
 
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label className="form-label">Patient *</label>
-                  <select name="patientId" defaultValue={editAppt?.patient.id} className="form-input" required>
-                    <option value="">Select patient…</option>
-                    {patientsList.map((p) => (
-                      <option key={p.id} value={p.id}>{p.firstName} {p.lastName}</option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label className="form-label">Staff Member *</label>
-                  <select name="staffId" defaultValue={editAppt?.staff.id} className="form-input" required>
-                    <option value="">Select staff…</option>
-                    {staffList.map((s) => (
-                      <option key={s.id} value={s.id}>{s.name}</option>
-                    ))}
-                  </select>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="form-label">Date & Time *</label>
-                    <input
-                      name="dateTime"
-                      type="datetime-local"
-                      defaultValue={editAppt ? format(new Date(editAppt.dateTime), "yyyy-MM-dd'T'HH:mm") : ""}
-                      className="form-input"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="form-label">Duration (min) *</label>
-                    <input
-                      name="duration"
-                      type="number"
-                      min={5}
-                      max={480}
-                      defaultValue={editAppt?.duration ?? 30}
-                      className="form-input"
-                      required
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="form-label">Type *</label>
-                    <select name="type" defaultValue={editAppt?.type ?? "CHECKUP"} className="form-input" required>
-                      {TYPES.map((t) => (
-                        <option key={t} value={t}>{t.replace("_", " ")}</option>
-                      ))}
-                    </select>
-                  </div>
-                  {editAppt && (
+              <form id="appt-form" onSubmit={handleSubmit} className="space-y-8">
+                {/* Section 1: Entities */}
+                <div className="space-y-4">
+                  <h3 className="text-xs font-bold text-brand-600 uppercase tracking-widest border-b border-surface-200 pb-2">
+                    Participants
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
-                      <label className="form-label">Status</label>
-                      <select name="status" defaultValue={editAppt.status} className="form-input">
-                        {STATUSES.map((s) => (
-                          <option key={s} value={s}>{s}</option>
+                      <label className="form-label">Patient Selection *</label>
+                      <select name="patientId" defaultValue={editAppt?.patient.id} className="form-input shadow-sm" required>
+                        <option value="" disabled>Select patient…</option>
+                        {patientsList.map((p) => (
+                          <option key={p.id} value={p.id}>{p.firstName} {p.lastName}</option>
                         ))}
                       </select>
                     </div>
-                  )}
-                </div>
-                <div>
-                  <label className="form-label">Notes</label>
-                  <textarea name="notes" rows={3} defaultValue={editAppt?.notes ?? ""} className="form-input" />
+                    <div>
+                      <label className="form-label">Staff Assignment *</label>
+                      <select name="staffId" defaultValue={editAppt?.staff.id} className="form-input shadow-sm" required>
+                        <option value="" disabled>Select staff member…</option>
+                        {staffList.map((s) => (
+                          <option key={s.id} value={s.id}>{s.name}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="flex justify-end gap-3 pt-2">
-                  <button type="button" onClick={() => { setShowModal(false); setEditAppt(null); }} className="btn btn-secondary">
-                    Cancel
-                  </button>
-                  <button type="submit" disabled={formLoading} className="btn btn-primary">
-                    {formLoading ? <Loader2 size={16} className="animate-spin" /> : null}
-                    {editAppt ? "Save Changes" : "Create"}
-                  </button>
+                {/* Section 2: Properties */}
+                <div className="space-y-4">
+                  <h3 className="text-xs font-bold text-brand-600 uppercase tracking-widest border-b border-surface-200 pb-2">
+                    Scheduling
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                      <label className="form-label">Date & Time *</label>
+                      <input
+                        name="dateTime"
+                        type="datetime-local"
+                        defaultValue={editAppt ? format(new Date(editAppt.dateTime), "yyyy-MM-dd'T'HH:mm") : ""}
+                        className="form-input shadow-sm"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="form-label">Duration (min) *</label>
+                      <input
+                        name="duration"
+                        type="number"
+                        min={5}
+                        max={480}
+                        step={5}
+                        defaultValue={editAppt?.duration ?? 30}
+                        className="form-input shadow-sm"
+                        required
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                      <label className="form-label">Appointment Type *</label>
+                      <select name="type" defaultValue={editAppt?.type ?? "CHECKUP"} className="form-input shadow-sm" required>
+                        {TYPES.map((t) => (
+                          <option key={t} value={t}>{t.replace("_", " ")}</option>
+                        ))}
+                      </select>
+                    </div>
+                    {editAppt && (
+                      <div>
+                        <label className="form-label">Status Context</label>
+                        <select name="status" defaultValue={editAppt.status} className="form-input shadow-sm bg-surface-50 focus:bg-white transition-colors">
+                          {STATUSES.map((s) => (
+                            <option key={s} value={s}>{s}</option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Section 3: Notes */}
+                <div className="space-y-2">
+                  <label className="flex items-center gap-2 text-xs font-bold text-brand-600 uppercase tracking-widest border-b border-surface-200 pb-2">
+                    Specific Requirements or Notes
+                  </label>
+                  <textarea 
+                    name="notes" 
+                    rows={3} 
+                    placeholder="Enter any necessary administrative or diagnostic context..."
+                    defaultValue={editAppt?.notes ?? ""} 
+                    className="form-input shadow-sm resize-none" 
+                  />
                 </div>
               </form>
+            </div>
+
+            {/* Footer */}
+            <div className="px-6 py-4 border-t border-surface-200 bg-surface-50 flex justify-end gap-3 rounded-b-2xl">
+              <button 
+                type="button" 
+                onClick={() => { setShowModal(false); setEditAppt(null); }} 
+                className="btn btn-secondary hover:bg-surface-200 shadow-sm"
+              >
+                Cancel
+              </button>
+              <button 
+                type="submit" 
+                form="appt-form"
+                disabled={formLoading} 
+                className="btn btn-primary shadow-md"
+              >
+                {formLoading ? <Loader2 size={18} className="animate-spin mr-1" /> : null}
+                {editAppt ? "Update Details" : "Book Appointment"}
+              </button>
             </div>
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

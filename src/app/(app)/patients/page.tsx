@@ -115,8 +115,9 @@ export default function PatientsPage() {
   };
 
   return (
-    <div className="animate-fade-in max-w-7xl mx-auto">
-      {/* Header */}
+    <>
+      <div className="animate-fade-in max-w-7xl mx-auto">
+        {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         <div>
           <h1 className="text-2xl font-bold text-surface-900 flex items-center gap-2">
@@ -222,77 +223,126 @@ export default function PatientsPage() {
         </div>
       )}
 
+      </div>
+
       {/* Modal */}
       {showModal && (
         <div className="modal-overlay" onClick={() => { setShowModal(false); setEditPatient(null); }}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-bold text-surface-900">
-                  {editPatient ? "Edit Patient" : "Add Patient"}
+          <div className="modal-content flex flex-col p-0 overflow-hidden" onClick={(e) => e.stopPropagation()}>
+            {/* Header */}
+            <div className="flex items-center justify-between px-6 py-5 border-b border-surface-200 bg-surface-50/50">
+              <div>
+                <h2 className="text-xl font-bold text-surface-900 tracking-tight">
+                  {editPatient ? "Edit Patient" : "Add New Patient"}
                 </h2>
-                <button onClick={() => { setShowModal(false); setEditPatient(null); }} className="text-surface-400 hover:text-surface-600">
-                  <X size={20} />
-                </button>
+                <p className="text-sm text-surface-500 mt-1">
+                  {editPatient ? "Update patient records below." : "Enter patient details to register them."}
+                </p>
               </div>
+              <button 
+                onClick={() => { setShowModal(false); setEditPatient(null); }} 
+                className="p-2 -mr-2 rounded-xl text-surface-400 hover:text-surface-700 hover:bg-surface-100 transition-colors"
+                aria-label="Close modal"
+              >
+                <X size={20} />
+              </button>
+            </div>
 
+            <div className="px-6 py-6 overflow-y-auto max-h-[65vh]">
               {formError && (
-                <div className="mb-4 p-3 rounded-xl bg-danger-50 border border-danger-500/20 text-danger-700 text-sm">
+                <div className="mb-6 p-4 rounded-xl bg-danger-50 border border-danger-500/20 text-danger-700 text-sm font-medium flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-danger-500" />
                   {formError}
                 </div>
               )}
 
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="form-label">First Name *</label>
-                    <input name="firstName" defaultValue={editPatient?.firstName} className="form-input" required />
+              <form id="patient-form" onSubmit={handleSubmit} className="space-y-8">
+                {/* Section 1 */}
+                <div className="space-y-4">
+                  <h3 className="text-xs font-bold text-brand-600 uppercase tracking-widest border-b border-surface-200 pb-2">
+                    Personal Details
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                      <label className="form-label">First Name *</label>
+                      <input name="firstName" defaultValue={editPatient?.firstName} className="form-input shadow-sm" placeholder="e.g. John" required />
+                    </div>
+                    <div>
+                      <label className="form-label">Last Name *</label>
+                      <input name="lastName" defaultValue={editPatient?.lastName} className="form-input shadow-sm" placeholder="e.g. Doe" required />
+                    </div>
                   </div>
                   <div>
-                    <label className="form-label">Last Name *</label>
-                    <input name="lastName" defaultValue={editPatient?.lastName} className="form-input" required />
+                    <label className="form-label">Date of Birth *</label>
+                    <input
+                      name="dateOfBirth"
+                      type="date"
+                      defaultValue={editPatient ? format(new Date(editPatient.dateOfBirth), "yyyy-MM-dd") : ""}
+                      className="form-input shadow-sm sm:max-w-xs"
+                      required
+                    />
                   </div>
                 </div>
-                <div>
-                  <label className="form-label">Date of Birth *</label>
-                  <input
-                    name="dateOfBirth"
-                    type="date"
-                    defaultValue={editPatient ? format(new Date(editPatient.dateOfBirth), "yyyy-MM-dd") : ""}
-                    className="form-input"
-                    required
+
+                {/* Section 2 */}
+                <div className="space-y-4">
+                  <h3 className="text-xs font-bold text-brand-600 uppercase tracking-widest border-b border-surface-200 pb-2">
+                    Contact Information
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                      <label className="form-label">Email Address</label>
+                      <input name="email" type="email" placeholder="john@example.com" defaultValue={editPatient?.email ?? ""} className="form-input shadow-sm" />
+                    </div>
+                    <div>
+                      <label className="form-label">Phone Number</label>
+                      <input name="phone" placeholder="+44 7700 900000" defaultValue={editPatient?.phone ?? ""} className="form-input shadow-sm" />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="form-label">Residential Address</label>
+                    <input name="address" placeholder="123 Main St, City" defaultValue={editPatient?.address ?? ""} className="form-input shadow-sm" />
+                  </div>
+                </div>
+
+                {/* Section 3 */}
+                <div className="space-y-2">
+                  <label className="flex items-center gap-2 text-xs font-bold text-brand-600 uppercase tracking-widest border-b border-surface-200 pb-2">
+                    Additional Notes
+                  </label>
+                  <textarea 
+                    name="notes" 
+                    rows={3} 
+                    placeholder="Provide any relevant medical history or administrative notes..."
+                    defaultValue={editPatient?.notes ?? ""} 
+                    className="form-input shadow-sm resize-none" 
                   />
                 </div>
-                <div>
-                  <label className="form-label">Email</label>
-                  <input name="email" type="email" defaultValue={editPatient?.email ?? ""} className="form-input" />
-                </div>
-                <div>
-                  <label className="form-label">Phone</label>
-                  <input name="phone" defaultValue={editPatient?.phone ?? ""} className="form-input" />
-                </div>
-                <div>
-                  <label className="form-label">Address</label>
-                  <input name="address" defaultValue={editPatient?.address ?? ""} className="form-input" />
-                </div>
-                <div>
-                  <label className="form-label">Notes</label>
-                  <textarea name="notes" rows={3} defaultValue={editPatient?.notes ?? ""} className="form-input" />
-                </div>
-                <div className="flex justify-end gap-3 pt-2">
-                  <button type="button" onClick={() => { setShowModal(false); setEditPatient(null); }} className="btn btn-secondary">
-                    Cancel
-                  </button>
-                  <button type="submit" disabled={formLoading} className="btn btn-primary">
-                    {formLoading ? <Loader2 size={16} className="animate-spin" /> : null}
-                    {editPatient ? "Save Changes" : "Add Patient"}
-                  </button>
-                </div>
               </form>
+            </div>
+
+            {/* Footer */}
+            <div className="px-6 py-4 border-t border-surface-200 bg-surface-50 flex justify-end gap-3 rounded-b-2xl">
+              <button 
+                type="button" 
+                onClick={() => { setShowModal(false); setEditPatient(null); }} 
+                className="btn btn-secondary hover:bg-surface-200 shadow-sm"
+              >
+                Cancel
+              </button>
+              <button 
+                type="submit" 
+                form="patient-form"
+                disabled={formLoading} 
+                className="btn btn-primary shadow-md"
+              >
+                {formLoading ? <Loader2 size={18} className="animate-spin mr-1" /> : null}
+                {editPatient ? "Save Changes" : "Register Patient"}
+              </button>
             </div>
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
