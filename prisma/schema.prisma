@@ -1,0 +1,93 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  STAFF
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELLED
+}
+
+model User {
+  id             String        @id @default(cuid())
+  email          String        @unique
+  name           String
+  hashedPassword String
+  role           Role          @default(STAFF)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  appointments   Appointment[] @relation("StaffAppointments")
+  auditLogs      AuditLog[]
+
+  @@map("users")
+}
+
+model Patient {
+  id          String        @id @default(cuid())
+  firstName   String
+  lastName    String
+  dateOfBirth DateTime
+  email       String?
+  phone       String?
+  address     String?
+  notes       String?
+  isDeleted   Boolean       @default(false)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  appointments Appointment[]
+
+  @@map("patients")
+}
+
+model Appointment {
+  id        String            @id @default(cuid())
+  dateTime  DateTime
+  duration  Int               @default(30) // in minutes
+  status    AppointmentStatus @default(SCHEDULED)
+  type      String            @default("General")
+  notes     String?
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+
+  patient   Patient           @relation(fields: [patientId], references: [id])
+  patientId String
+
+  staff     User              @relation("StaffAppointments", fields: [staffId], references: [id])
+  staffId   String
+
+  @@index([dateTime])
+  @@index([status])
+  @@index([patientId])
+  @@index([staffId])
+  @@map("appointments")
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  action    String   // CREATE, UPDATE, DELETE, CANCEL, LOGIN
+  entity    String   // Patient, Appointment, User
+  entityId  String?
+  details   Json?
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+
+  @@index([createdAt])
+  @@index([entity])
+  @@map("audit_logs")
+}
