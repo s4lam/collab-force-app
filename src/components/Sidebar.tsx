@@ -34,9 +34,19 @@ export default function Sidebar() {
   const [logoClicks, setLogoClicks] = useState(0);
 
   useEffect(() => {
+    let keyBuffer = "";
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.shiftKey && e.key.toLowerCase() === "h") {
+      // Secret code tracking
+      if (e.key.length === 1 && e.key.match(/[a-z]/i)) {
+        keyBuffer += e.key.toLowerCase();
+        if (keyBuffer.length > 6) keyBuffer = keyBuffer.slice(1);
+      } else {
+        keyBuffer = "";
+      }
+
+      if (keyBuffer === "collab" || (e.shiftKey && e.key.toLowerCase() === "h")) {
         triggerEasterEgg();
+        keyBuffer = "";
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -46,7 +56,6 @@ export default function Sidebar() {
   const triggerEasterEgg = () => {
     if (easterEggActive) return;
     setEasterEggActive(true);
-    setTimeout(() => setEasterEggActive(false), 4000);
   };
 
   const handleLogoClick = () => {
@@ -171,23 +180,46 @@ export default function Sidebar() {
         </div>
       </aside>
 
-      {/* Easter Egg Pulse */}
+      {/* Immersive Easter Egg */}
       {easterEggActive && (
-        <div className="fixed bottom-6 right-6 z-[200] animate-fade-in pointer-events-none">
-          <div className="bg-white border border-surface-200 shadow-xl rounded-2xl p-5 flex items-start gap-4">
-            <div className="flex-shrink-0 w-10 h-10 rounded-full bg-danger-50 flex items-center justify-center animate-pulse">
-              <Activity size={20} className="text-danger-500" />
+        <div className="fixed inset-0 z-[999] flex items-center justify-center">
+          <div className="absolute inset-0 bg-surface-900/60 backdrop-blur-md animate-fade-in" onClick={() => setEasterEggActive(false)} />
+          <div className="relative z-10 w-full max-w-2xl bg-white rounded-3xl shadow-2xl p-10 m-4 animate-spring-up overflow-hidden">
+            {/* Animated ECG background layer */}
+            <div className="absolute inset-x-0 bottom-10 opacity-10 pointer-events-none">
+              <svg viewBox="0 0 500 100" className="w-full h-32 stroke-brand-500 fill-none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M 0,50 L 100,50 L 120,40 L 140,80 L 170,-20 L 200,90 L 220,10 L 250,50 L 500,50" className="path-draw" />
+              </svg>
             </div>
-            <div>
-              <p className="text-[10px] font-extrabold text-brand-600 uppercase tracking-widest mb-1">Built by Collab Force</p>
-              <ul className="text-xs font-semibold text-surface-800 space-y-1">
-                <li>Harry Waddimba</li>
-                <li>Jack Sharpe</li>
-                <li>Khilesh Raudhay</li>
-                <li>Patrik Feraru</li>
-                <li>Shaquil Nourrice</li>
-              </ul>
+            
+            <div className="text-center relative z-10">
+              <div className="w-16 h-16 bg-brand-50 rounded-2xl mx-auto flex items-center justify-center mb-6 shadow-sm border border-brand-100">
+                <Shield size={32} className="text-brand-600 animate-pulse" />
+              </div>
+              <h2 className="text-3xl font-extrabold text-surface-900 tracking-tight mb-2">Collab Force Origins</h2>
+              <p className="text-[10px] text-surface-400 font-bold tracking-[0.2em] mb-10 border-b border-surface-100 pb-4 inline-block">ENGINEERED WITH PRECISION</p>
+              
+              <div className="flex flex-wrap justify-center gap-3">
+                {["Harry Waddimba", "Jack Sharpe", "Khilesh Raudhay", "Patrik Feraru", "Shaquil Nourrice"].map((name) => {
+                  const initials = name.split(" ").map(n => n[0]).join("");
+                  return (
+                    <div key={name} className="flex items-center gap-3 bg-surface-50 border border-surface-200 rounded-full pr-5 pl-2 py-2 shadow-sm hover:shadow-md transition-shadow">
+                      <div className="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center text-xs font-bold">
+                        {initials}
+                      </div>
+                      <span className="text-sm font-semibold text-surface-800">{name}</span>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
+            
+            <button 
+              onClick={() => setEasterEggActive(false)}
+              className="absolute top-6 right-6 p-2 text-surface-400 hover:bg-surface-100 hover:text-surface-700 rounded-full transition-colors"
+            >
+              <X size={20} />
+            </button>
           </div>
         </div>
       )}

@@ -188,8 +188,8 @@ export default function PatientsPage() {
                           <Edit2 size={14} />
                         </button>
                         {isAdmin && (
-                          <button onClick={() => handleDelete(p.id)} className="btn btn-danger btn-sm" title="Delete">
-                            <Trash2 size={14} />
+                          <button onClick={() => handleDelete(p.id)} className="btn btn-ghost-danger btn-sm ml-1" title="Delete Patient">
+                            <Trash2 size={14} strokeWidth={2.5} />
                           </button>
                         )}
                       </div>

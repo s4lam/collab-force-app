@@ -257,8 +257,8 @@ export default function AppointmentsPage() {
                           <Edit2 size={14} />
                         </button>
                         {isAdmin && (
-                          <button onClick={() => handleDelete(a.id)} className="btn btn-danger btn-sm" title="Delete">
-                            <X size={14} />
+                          <button onClick={() => handleDelete(a.id)} className="btn btn-ghost-danger btn-sm ml-1" title="Delete Appointment">
+                            <X size={14} strokeWidth={2.5} />
                           </button>
                         )}
                       </div>
