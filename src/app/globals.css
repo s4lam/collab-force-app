@@ -86,16 +86,15 @@ body {
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ── Glass card ──────────────────────────────────────── */
+/* ── Solid card ──────────────────────────────────────── */
 .glass-card {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(226, 232, 240, 0.6);
+  background: white;
+  border: 1px solid var(--color-surface-200);
   border-radius: 16px;
   box-shadow:
     0 1px 3px rgba(0, 0, 0, 0.04),
     0 4px 12px rgba(0, 0, 0, 0.03);
+  transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .glass-card:hover {
@@ -199,7 +198,7 @@ body {
   font-weight: 600;
   cursor: pointer;
   border: none;
-  transition: all 0.15s ease;
+  transition: all 150ms ease-out;
 }
 
 .btn:disabled {
@@ -207,22 +206,26 @@ body {
   cursor: not-allowed;
 }
 
+.btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
 .btn-primary {
-  background: linear-gradient(135deg, var(--color-brand-500), var(--color-brand-600));
+  background: var(--color-brand-600);
   color: white;
-  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.25);
+  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.2);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: linear-gradient(135deg, var(--color-brand-600), var(--color-brand-700));
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
-  transform: translateY(-1px);
+  background: var(--color-brand-700);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
 }
 
 .btn-secondary {
   background: var(--color-surface-0);
   color: var(--color-surface-700);
   border: 1px solid var(--color-surface-200);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .btn-secondary:hover:not(:disabled) {
@@ -231,14 +234,14 @@ body {
 }
 
 .btn-danger {
-  background: linear-gradient(135deg, var(--color-danger-500), var(--color-danger-700));
+  background: var(--color-danger-600);
   color: white;
-  box-shadow: 0 1px 3px rgba(239, 68, 68, 0.25);
+  box-shadow: 0 1px 3px rgba(239, 68, 68, 0.2);
 }
 
 .btn-danger:hover:not(:disabled) {
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35);
-  transform: translateY(-1px);
+  background: var(--color-danger-700);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
 }
 
 .btn-sm {
@@ -336,8 +339,7 @@ body {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.5);
-  backdrop-filter: blur(4px);
+  background: rgba(15, 23, 42, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -346,12 +348,12 @@ body {
 }
 
 .modal-content {
-  background: var(--color-surface-0);
+  background: white;
   border-radius: 16px;
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
   max-width: 500px;
   width: 90%;
   max-height: 90vh;
   overflow-y: auto;
-  animation: fadeIn 0.2s ease-out;
+  animation: slideUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }

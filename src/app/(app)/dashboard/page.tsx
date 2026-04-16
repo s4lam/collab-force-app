@@ -9,6 +9,7 @@ import {
   Clock,
   TrendingUp,
   Activity,
+  Shield,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -129,21 +130,40 @@ export default function DashboardPage() {
         })}
       </div>
 
-      {/* Status breakdown */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-8">
-        {[
-          { label: "Scheduled", value: stats.scheduledCount, cls: "badge-scheduled" },
-          { label: "Completed", value: stats.completedCount, cls: "badge-completed" },
-          { label: "Cancelled", value: stats.cancelledCount, cls: "badge-cancelled" },
-        ].map((s) => (
-          <div key={s.label} className="glass-card p-5 flex items-center justify-between">
-            <div>
-              <p className="text-sm text-surface-500">{s.label}</p>
-              <p className="text-2xl font-bold text-surface-900 mt-1">{s.value}</p>
-            </div>
-            <span className={`badge ${s.cls}`}>{s.label}</span>
+      {/* Contributors & Status breakdown */}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-5 mb-8">
+        <div className="glass-card p-5 lg:col-span-1 bg-surface-900 border-surface-800 text-white flex flex-col justify-between shadow-lg">
+          <div>
+            <p className="text-[10px] font-bold text-surface-400 uppercase tracking-widest mb-3">Project Contributors</p>
+            <ul className="text-sm font-medium text-surface-100 space-y-1.5 list-disc list-inside marker:text-surface-600">
+              <li>Harry Waddimba</li>
+              <li>Jack Sharpe</li>
+              <li>Khilesh Raudhay</li>
+              <li>Patrik Feraru</li>
+              <li>Shaquil Nourrice</li>
+            </ul>
           </div>
-        ))}
+          <div className="mt-6 pt-4 border-t border-surface-700 flex items-center gap-2">
+            <Shield size={14} className="text-brand-400" />
+            <span className="text-[10px] font-semibold tracking-wider uppercase text-surface-400">Collab Force Core</span>
+          </div>
+        </div>
+
+        <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-3 gap-5">
+          {[
+            { label: "Scheduled", value: stats.scheduledCount, cls: "badge-scheduled" },
+            { label: "Completed", value: stats.completedCount, cls: "badge-completed" },
+            { label: "Cancelled", value: stats.cancelledCount, cls: "badge-cancelled" },
+          ].map((s) => (
+            <div key={s.label} className="glass-card p-5 flex items-center justify-between">
+              <div>
+                <p className="text-sm text-surface-500">{s.label}</p>
+                <p className="text-2xl font-bold text-surface-900 mt-1">{s.value}</p>
+              </div>
+              <span className={`badge ${s.cls}`}>{s.label}</span>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Recent appointments */}

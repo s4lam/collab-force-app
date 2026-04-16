@@ -79,9 +79,12 @@ export default function AuditPage() {
             ))}
           </div>
         ) : entries.length === 0 ? (
-          <div className="p-12 text-center text-surface-400">
-            <FileText size={40} className="mx-auto mb-3 opacity-40" />
-            <p className="font-medium">No audit entries</p>
+          <div className="p-16 text-center text-surface-500">
+            <div className="w-20 h-20 rounded-2xl bg-surface-100 border border-surface-200 shadow-sm flex items-center justify-center mx-auto mb-5 rotate-3 hover:rotate-0 transition-transform duration-300">
+              <FileText size={32} className="text-surface-400" />
+            </div>
+            <p className="font-bold text-surface-900 text-lg">No audit entries</p>
+            <p className="text-sm mt-1.5 max-w-sm mx-auto">System tracking is active, but no record mutations have occurred yet.</p>
           </div>
         ) : (
           <div className="divide-y divide-surface-100">

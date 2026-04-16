@@ -199,10 +199,12 @@ export default function AppointmentsPage() {
             ))}
           </div>
         ) : appointments.length === 0 ? (
-          <div className="p-12 text-center text-surface-400">
-            <CalendarDays size={40} className="mx-auto mb-3 opacity-40" />
-            <p className="font-medium">No appointments found</p>
-            <p className="text-sm mt-1">Schedule a new appointment to get started</p>
+          <div className="p-16 text-center text-surface-500">
+            <div className="w-20 h-20 rounded-2xl bg-brand-50 border border-brand-100 shadow-sm flex items-center justify-center mx-auto mb-5 -rotate-3 hover:rotate-0 transition-transform duration-300">
+              <CalendarDays size={32} className="text-brand-500" />
+            </div>
+            <p className="font-bold text-surface-900 text-lg">No appointments found</p>
+            <p className="text-sm mt-1.5 max-w-sm mx-auto">Click "New Appointment" to schedule a consultation between a patient and practitioner.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
