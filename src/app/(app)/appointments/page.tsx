@@ -177,7 +177,7 @@ export default function AppointmentsPage() {
       </div>
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-3 mb-6">
+      <div className="flex flex-nowrap overflow-x-auto pb-2 gap-2 mb-6" style={{ WebkitOverflowScrolling: 'touch' }}>
         {["", ...STATUSES].map((s) => (
           <button
             key={s}
@@ -322,7 +322,7 @@ export default function AppointmentsPage() {
                     ))}
                   </select>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="form-label">Date & Time *</label>
                     <input
@@ -346,7 +346,7 @@ export default function AppointmentsPage() {
                     />
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="form-label">Type *</label>
                     <select name="type" defaultValue={editAppt?.type ?? "CHECKUP"} className="form-input" required>

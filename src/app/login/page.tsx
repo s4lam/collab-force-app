@@ -142,8 +142,8 @@ export default function LoginPage() {
           <div className="mt-8 p-4 rounded-xl bg-surface-100 border border-surface-200">
             <p className="text-xs font-semibold text-surface-500 mb-2">Demo credentials</p>
             <div className="space-y-1 text-sm text-surface-600">
-              <p><span className="font-medium">Admin:</span> admin@collabforce.com / admin123</p>
-              <p><span className="font-medium">Staff:</span> sarah@collabforce.com / staff123</p>
+              <p><span className="font-medium">Admin:</span> admin@collabforce.com / password123</p>
+              <p><span className="font-medium">Staff:</span> staff@collabforce.com / password123</p>
             </div>
           </div>
         </div>

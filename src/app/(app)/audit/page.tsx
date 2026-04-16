@@ -28,8 +28,12 @@ export default function AuditPage() {
     if (entityFilter) params.set("entity", entityFilter);
     const res = await fetch(`/api/audit?${params}`);
     const data = await res.json();
-    setEntries(data.entries);
-    setTotalPages(data.pagination.totalPages);
+    if (res.ok) {
+      setEntries(data.logs || data.entries || []);
+      setTotalPages(data.pagination?.totalPages || 1);
+    } else {
+      setEntries([]);
+    }
     setLoading(false);
   }, [page, entityFilter]);
 

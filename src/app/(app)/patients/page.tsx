@@ -140,7 +140,7 @@ export default function PatientsPage() {
           placeholder="Search patients by name, email, or phone…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="form-input pl-10"
+          className="form-input !pl-10"
         />
       </div>
 
@@ -243,7 +243,7 @@ export default function PatientsPage() {
               )}
 
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="form-label">First Name *</label>
                     <input name="firstName" defaultValue={editPatient?.firstName} className="form-input" required />

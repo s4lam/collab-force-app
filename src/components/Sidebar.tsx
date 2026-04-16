@@ -38,7 +38,7 @@ export default function Sidebar() {
     <>
       {/* Mobile toggle */}
       <button
-        className="fixed top-4 left-4 z-50 p-2 rounded-lg bg-surface-800 text-white lg:hidden"
+        className="fixed top-4 left-4 z-40 p-2 rounded-lg bg-surface-800 text-white lg:hidden"
         onClick={() => setMobileOpen(!mobileOpen)}
         aria-label="Toggle menu"
       >
@@ -55,7 +55,7 @@ export default function Sidebar() {
 
       {/* Sidebar */}
       <aside
-        className={`sidebar fixed top-0 left-0 h-full w-64 z-40 flex flex-col transform transition-transform duration-200 ease-in-out
+        className={`sidebar fixed top-0 left-0 h-full w-64 shrink-0 z-40 flex flex-col transform transition-transform duration-200 ease-in-out
           ${mobileOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0 lg:static lg:z-auto`}
       >
         {/* Logo */}

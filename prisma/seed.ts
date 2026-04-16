@@ -1,8 +1,13 @@
+import "dotenv/config";
 import { PrismaClient, AppointmentStatus, Role } from "@prisma/client";
 import { Pool } from "pg";
 import { PrismaPg } from "@prisma/adapter-pg";
 import bcrypt from "bcryptjs";
 import { addDays, addHours, setHours, setMinutes, subDays } from "date-fns";
+
+if (!process.env.DATABASE_URL) {
+  throw new Error("DATABASE_URL is not set");
+}
 
 const connectionString = `${process.env.DATABASE_URL}`;
 const pool = new Pool({ connectionString });
